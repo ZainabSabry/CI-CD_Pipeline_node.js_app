@@ -39,7 +39,7 @@ environment {
 
 - Then press 'save' and 'Build Now'
 
-- To test your application, you can do one of two things:
+- To test your application, you can do one of the following:
 
     - If you have the slave configured as an Ansible agent, then run the following:
     ```bash
