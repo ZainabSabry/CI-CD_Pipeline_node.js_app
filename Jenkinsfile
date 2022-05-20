@@ -27,7 +27,7 @@ pipeline {
             steps {
             withCredentials([usernamePassword(credentialsId: 'rds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
                 //Run the docker image with 
-                sh "docker run -d -it -p 3000:3000 --env RDS_HOSTNAME=${rds_hostname} --env RDS_USERNAME=${USERNAME} --env RDS_PASSWORD=${PASSWORD} --env REDIS_HOSTNAME=${redis_hostname}  zainabsabry/jenkins_nodejs_example:latest"
+                sh "docker run -d -it -p 3000:3000 --env RDS_HOSTNAME=${rds_hostname} --env RDS_USERNAME=${USERNAME} --env RDS_PASSWORD=${PASSWORD} --env REDIS_HOSTNAME=${redis_hostname}  zainabsabry/jenkins_node_rds_redis:latest"
             }
                 
             }
