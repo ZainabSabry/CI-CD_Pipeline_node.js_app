@@ -22,18 +22,17 @@ pipeline {
                 sh "docker push zainabsabry/jenkins_node_rds_redis:latest"
                 
             }
-        }
         post {
-        // If CI stage was successful, send a green notification to slack
-        success {
-            slackSend(channel: 'jenkins', color: 'good', message: "CI was successful - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            // If CI stage was successful, send a green notification to slack
+            success {
+                slackSend(channel: 'jenkins', color: 'good', message: "CI was successful - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            }
+            // If deployment fails, send a red notification
+            failure {
+                slackSend(channel: 'jenkins', color: 'danger', message: "CI Failed  - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            }
         }
-        // If deployment fails, send a red notification
-        failure {
-            slackSend(channel: 'jenkins', color: 'danger', message: "CI Failed  - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
-        }
-    }
-        
+        }    
         stage('CD') {
             steps {
             withCredentials([usernamePassword(credentialsId: 'rds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
