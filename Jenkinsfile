@@ -33,4 +33,18 @@ pipeline {
             }
         }
     }
+    post {
+        // If deployment was successful, send a green notification to slack
+        success {
+            slackSend(channel: 'jenkins', color: 'good', message: "Deployed Successfully - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+        }
+        // If deployment fails, send a red notification
+        failure {
+            slackSend(channel: 'jenkins', color: 'danger', message: "Build Failed  - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+        }
+        // trigger every-works
+        always {
+            slackSend message: 'New Build'
+        }
+    }
 }
