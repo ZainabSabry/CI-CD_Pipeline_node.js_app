@@ -9,7 +9,7 @@ Using Jenkins pipeline, deploying a node.js application on a Jenkins slave (priv
 It is recommended that you follow the infrastructure pipeline steps before running this CI/CD pipeline, for the infrastructure pipeline, <b> Press the Terraform icon</b>:
 
 <p align="center">
-<a href="https://github.com/ZainabSabry/AWS_Infrastructure_Pipeline.git"><img src="https://www.vectorlogo.zone/logos/terraformio/terraformio-icon.svg"/></a>
+<a href="https://github.com/ZainabSabry/AWS_Infrastructure_Pipeline.git"><img src="https://www.vectorlogo.zone/logos/github/github-icon.svg"/></a>
 </p>
 
 ## Getting Started
@@ -30,7 +30,39 @@ environment {
         }
 ```
 
-### 2- Creating and Running Pipeline
+### 2- Configuring Slack for Notifications
+<br>
+
+- Install "Slack Notification" plugin
+- Create new slack workspace and a new channel
+- Add jenkins CI to Slack from "Browse Slack" => "Apps"
+<br>
+
+<p align='center'>
+<img src="./imgs/slackjenkinsci.jpg" alt="architecture" width="80%" height="80%"/>
+</p>
+
+- Follow the steps to configure the Jenkins CI with slack: 
+<br>
+    - Create a "Secret Text" Credential for the token
+    - Configure the slack plugin under "Configure System" as follows:  workspace name, channel name, and credential
+
+<p align='center'>
+<img src="./imgs/workspacename.jpg" alt="architecture" width="80%" height="80%"/>
+</p>
+
+<p align='center'>
+<img src="./imgs/slackconfigure.jpg" alt="architecture" width="80%" height="80%"/>
+</p>
+
+- To make sure it is successfully connected, you should press "Test Connection" Button and get "Success"
+
+<p align='center'>
+<img src="./imgs/testconnection.jpg" alt="architecture" width="80%" height="80%"/>
+</p>
+
+
+### 3- Creating and Running Pipeline
 
 - Create a pipeline as follows:
 <p align='center'>
@@ -69,4 +101,5 @@ environment {
 <img src="https://www.vectorlogo.zone/logos/jenkins/jenkins-icon.svg"/>
 <img src="https://www.vectorlogo.zone/logos/amazon_aws/amazon_aws-icon.svg"/>
 <img src="https://www.vectorlogo.zone/logos/nodejs/nodejs-ar21.svg"/>
+<img src="https://www.vectorlogo.zone/logos/slack/slack-icon.svg"/>
 </p>
