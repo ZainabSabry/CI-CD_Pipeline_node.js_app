@@ -1,8 +1,8 @@
 pipeline {
     agent {label 'ec2_private_slave'}
     environment {
-        rds_hostname = 'terraform-20220522185720575200000004.c1vpvridguyo.us-east-1.rds.amazonaws.com'
-        redis_hostname    = 'terra-redis-cluster.nvp9dd.0001.use1.cache.amazonaws.com'
+        env = 'dev'
+        rds_port = 3306
         }
     stages {
         stage('CI') {
@@ -34,10 +34,16 @@ pipeline {
         }
         }    
         stage('CD') {
+            environment {
+                RDS_ENDPOINT = 'aws ssm get-parameter --name /dev/database/endpoint --query "Parameter.Value" --with-decryption --output text'
+                RDS_USERNAME = 'aws ssm get-parameter --name /dev/database/username --query "Parameter.Value" --with-decryption --output text'
+                RDS_PASSWORD = 'aws ssm get-parameter --name /dev/database/password --query "Parameter.Value" --with-decryption --output text'
+                REDIS_ENDPOINT = 'aws ssm get-parameter --name /dev/redis/endpoint --query "Parameter.Value" --with-decryption --output text'
+            }
             steps {
-            withCredentials([usernamePassword(credentialsId: 'rds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+            withAWS(credentials: 'aws', region: 'us-east-1'){
                 //Run the docker image with 
-                sh "docker run -d -it -p 3000:3000 --env RDS_HOSTNAME=${rds_hostname} --env RDS_USERNAME=${USERNAME} --env RDS_PASSWORD=${PASSWORD} --env RDS_PORT=3306 --env REDIS_HOSTNAME=${redis_hostname}  zainabsabry/jenkins_node_rds_redis:latest"
+                sh "docker run -d -it -p 3000:3000 --env RDS_HOSTNAME=$(${RDS_ENDPOINT}) --env RDS_USERNAME=$(${RDS_USERNAME}) --env RDS_PASSWORD=$(${RDS_PASSWORD}) --env RDS_PORT=${rds_port} --env REDIS_HOSTNAME=$(${REDIS_ENDPOINT})  zainabsabry/jenkins_node_rds_redis:latest"
             }
                 
             }
