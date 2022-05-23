@@ -35,15 +35,15 @@ pipeline {
         }    
         stage('CD') {
             environment {
-                RDS_ENDPOINT = 'aws ssm get-parameter --name /dev/database/endpoint --query "Parameter.Value" --with-decryption --output text'
-                RDS_USERNAME = 'aws ssm get-parameter --name /dev/database/username --query "Parameter.Value" --with-decryption --output text'
-                RDS_PASSWORD = 'aws ssm get-parameter --name /dev/database/password --query "Parameter.Value" --with-decryption --output text'
-                REDIS_ENDPOINT = 'aws ssm get-parameter --name /dev/redis/endpoint --query "Parameter.Value" --with-decryption --output text'
+                RDS_ENDPOINT = '$(aws ssm get-parameter --name /dev/database/endpoint --query "Parameter.Value" --with-decryption --output text)'
+                RDS_USERNAME = '$(aws ssm get-parameter --name /dev/database/username --query "Parameter.Value" --with-decryption --output text)'
+                RDS_PASSWORD = '$(aws ssm get-parameter --name /dev/database/password --query "Parameter.Value" --with-decryption --output text)'
+                REDIS_ENDPOINT = '$(aws ssm get-parameter --name /dev/redis/endpoint --query "Parameter.Value" --with-decryption --output text)'
             }
             steps {
             withAWS(credentials: 'aws', region: 'us-east-1'){
                 //Run the docker image with 
-                sh "docker run -d -it -p 3000:3000 --env RDS_HOSTNAME=$(${RDS_ENDPOINT}) --env RDS_USERNAME=$(${RDS_USERNAME}) --env RDS_PASSWORD=$(${RDS_PASSWORD}) --env RDS_PORT=${rds_port} --env REDIS_HOSTNAME=$(${REDIS_ENDPOINT})  zainabsabry/jenkins_node_rds_redis:latest"
+                sh "docker run -d -it -p 3000:3000 --env RDS_HOSTNAME=${RDS_ENDPOINT} --env RDS_USERNAME=${RDS_USERNAME} --env RDS_PASSWORD=${RDS_PASSWORD} --env RDS_PORT=${rds_port} --env REDIS_HOSTNAME=${REDIS_ENDPOINT}  zainabsabry/jenkins_node_rds_redis:latest"
             }
                 
             }
