@@ -48,6 +48,11 @@ pipeline {
                 
             }
         }
+        stage('clean workspace') {
+            steps {
+                cleanWs()
+            }   
+        }
     }
     post {
         // If deployment was successful, send a green notification to slack
